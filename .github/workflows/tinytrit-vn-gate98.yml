@@ -1,0 +1,38 @@
+name: Tinytrit Vietnamese 98 percent research gate
+
+on:
+  pull_request:
+    paths:
+      - 'tinytrit_vn/**'
+      - 'tests/test_tinytrit_vn.py'
+      - 'evidence/**'
+      - 'docs/TINYTRIT_VI_METHODOLOGY.md'
+      - '.github/workflows/tinytrit-vn-gate98.yml'
+  workflow_dispatch:
+
+jobs:
+  python-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p 'test_tinytrit_vn.py' -v
+
+  scientific-release-gate:
+    needs: python-unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Intentionally FAILS unless independently obtained evidence exists.
+      - run: python -m tinytrit_vn.gate98 --report evidence/real/metrics.json --evidence-dir evidence/real --output evidence/gate_result.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tinytrit-gate98-report
+          path: evidence/gate_result.json
+          if-no-files-found: warn
