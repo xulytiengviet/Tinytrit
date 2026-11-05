@@ -15,9 +15,9 @@ Lưu ý: các mũi tên “xuất trọng số sang RTL” và “huấn luyện
 | Chỉ tiêu | Báo cáo Trinity gốc | Tinytrit Việt hóa |
 |---|---:|---|
 | Mục tiêu bo mạch | QMTech XC7A100T | Chưa xác minh bằng phần cứng |
-| Tần số tối đa | 92 MHz | Chưa đo |
-| Thông lượng | ~63 token/s | Chưa đo |
-| Công suất | ~1 W | Chưa đo |
+| Tần số tối đa | 92 MHz (ước lượng timing) | Chưa đo |
+| Thông lượng | ~34 token/s đo ở 50 MHz; ~63 tok/s là ngoại suy tại 92 MHz | Chưa đo |
+| Công suất | Chưa có đo đạc công suất; tuyên bố ~1 W đã bị rút lại | Chưa đo |
 | DSP48 | 0 | Chưa tổng hợp lại |
 | HSLM Zig | ~1,95 triệu tham số, ~390 KB lý thuyết | Chưa huấn luyện trên tiếng Việt |
 | RTL FPGA full | 128 token, 4 block | Chưa nạp trọng số học tiếng Việt |
@@ -56,7 +56,7 @@ Tệp `data/cvnss27.alphabet.txt` phải do người nghiên cứu cung cấp v�
 
 ## Cổng nghiệm thu >=98%
 
-Cần **ít nhất 1.000 mẫu** cho từng bộ đánh giá CVNSS đầu ra, round-trip và dự đoán token trên tập held-out, cùng **>=16 token** cho đối chiếu CPU–FPGA. Mỗi phép đo phải >=98% exact match. FPGA phải có log, hash bằng chứng, trọng số đã huấn luyện, 0 DSP48, throughput >=61,74 token/s, Fmax >=90,16 MHz và công suất đo trong giới hạn thực nghiệm quy định. Gate cố ý FAIL nếu thiếu một thành phần; phép kiểm phần mềm đơn thuần không cấp phép công bố kết quả phần cứng.
+Cần **ít nhất 1.000 mẫu** cho từng bộ đánh giá CVNSS đầu ra, round-trip và dự đoán token trên tập held-out, cùng **>=16 token** cho đối chiếu CPU–FPGA. Mỗi phép đo phải >=98% exact match. FPGA phải có log, hash bằng chứng, trọng số đã huấn luyện, 0 DSP48, throughput >=33,32 token/s **đo ở 50 MHz**, Fmax >=90,16 MHz (tổng hợp timing) và báo cáo công suất đo thực tế, không lấy ~1 W làm chuẩn do upstream đã rút lại. Gate cố ý FAIL nếu thiếu một thành phần; phép kiểm phần mềm đơn thuần không cấp phép công bố kết quả phần cứng.
 
 Xem [phương pháp khoa học và dữ liệu](docs/TINYTRIT_VI_METHODOLOGY.md), [hướng dẫn bằng chứng nghiệm thu](evidence/README.md), [mã gate98](tinytrit_vn/gate98.py) và [đơn vị kiểm thử](tests/test_tinytrit_vn.py).
 

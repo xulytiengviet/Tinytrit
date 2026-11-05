@@ -7,7 +7,7 @@ import math
 from pathlib import Path
 
 THRESHOLD = 0.98
-REFERENCE_TOK_S = 63.0
+REFERENCE_TOK_S = 34.0
 REFERENCE_FMAX_MHZ = 92.0
 REQUIRED = (
     "cvnss_gold", "cvnss_roundtrip", "heldout_token_predictions",
@@ -95,7 +95,7 @@ def validate(report_path: Path, evidence_dir: Path) -> dict:
              "Bitstream có trọng số huấn luyện tiếng Việt, không dùng trọng số mẫu")
     _require(checks, "hardware:zero_dsp", fpga.get("dsp48_count") == 0, "Yosys: DSP48 phải bằng 0")
     _require(checks, "hardware:generated_tokens", numeric("tokens_generated") >= 16, "Tối thiểu 16 token autoregressive")
-    _require(checks, "hardware:throughput", numeric("throughput_tok_s") >= THRESHOLD * REFERENCE_TOK_S,
+    _require(checks, "hardware:benchmark_clock", 49.9 <= numeric("benchmark_clock_mhz") <= 50.1,\n             "Thông lượng phải đo ở 50 MHz để so được với ~34 tok/s upstream")\n    _require(checks, "hardware:throughput", numeric("throughput_tok_s") >= THRESHOLD * REFERENCE_TOK_S,
              f"Thông lượng >= {THRESHOLD * REFERENCE_TOK_S:.2f} tok/s (98% của 63)")
     _require(checks, "hardware:fmax", numeric("fmax_mhz") >= THRESHOLD * REFERENCE_FMAX_MHZ,
              f"Fmax >= {THRESHOLD * REFERENCE_FMAX_MHZ:.2f} MHz (98% của 92)")

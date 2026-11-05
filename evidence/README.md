@@ -14,7 +14,7 @@ Mẫu schema JSON (chưa thể PASS):
     "physical_board_verified": false,
     "uses_vietnamese_trained_weights": false,
     "dsp48_count": null, "tokens_generated": null,
-    "throughput_tok_s": null, "fmax_mhz": null, "power_w": null
+    "benchmark_clock_mhz": 50, "throughput_tok_s": null, "fmax_mhz": null, "power_w": null
   },
   "evidence": {}
 }

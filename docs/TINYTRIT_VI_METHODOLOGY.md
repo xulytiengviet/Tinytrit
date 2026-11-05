@@ -37,7 +37,7 @@ Dữ liệu `{"cqn": "...", "cvnss": "..."}` được chuyển đổi bên ngoà
 
 Gói 52 tệp sạch đi kèm từ upstream thiếu module Verilog phụ thuộc và các trọng số .mem; cần nhập lại mã RTL và generator **theo commit được ghim hash** từ source đầy đủ, không phát minh bitstream. Trước synthesis: unit test Base27, golden vectors cho matvec, mô phỏng RTL, so khớp CPU–RTL; sau synthesis: Yosys thống kê DSP/LUT/BRAM, nextpnr timing; sau flash: UART ≥16 token, đối chiếu trace, đo tok/s và watt bằng thiết bị thật.
 
-Số upstream (`63 tok/s@92MHz, ~1W, 0 DSP`) là mục tiêu **tham chiếu**, không phải kết quả đo trên Tinytrit. Chính báo cáo upstream ghi TODO **Trained weights: replace deterministic patterns with actual trained ternary weights**.
+Số upstream (`~34 tok/s đo tại 50 MHz; 63 tok/s tại 92 MHz là ngoại suy và ~1 W đã bị rút lại do không có phép đo, 0 DSP`) là mục tiêu **tham chiếu**, không phải kết quả đo trên Tinytrit. Chính báo cáo upstream ghi TODO **Trained weights: replace deterministic patterns with actual trained ternary weights**.
 
 ## 6. Chỉ PASS nếu đầy đủ bằng chứng
 
@@ -45,8 +45,8 @@ Số upstream (`63 tok/s@92MHz, ~1W, 0 DSP`) là mục tiêu **tham chiếu**, k
 - Roundtrip CVNSS có chính sách công bố: ≥1.000 cặp; ≥98%.
 - Dự đoán token held-out: ≥1.000; top-1 ≥98% (mục tiêu nghiên cứu rất cao, không mặc định đạt).
 - CPU–FPGA token parity: ≥16 token thật; ≥98%.
-- Throughput ≥61,74 tok/s; Fmax ≥90,16 MHz; 0 DSP48, ≥16 token autoregressive.
-- Công suất đo 0–1,25 W (dung sai kỹ thuật khai báo 25% so với số ~1 W; không coi là “98% chính xác về điện năng”).
+- Throughput ≥33,32 tok/s **đo tại 50 MHz**; Fmax ≥90,16 MHz theo báo cáo timing (92 MHz nguồn là Fmax ước lượng); 0 DSP48, ≥16 token autoregressive.
+- Công suất đo thực tế >0 W kèm nhật ký thiết bị; chưa có mục tiêu so sánh điện năng vì upstream đã rút lại ~1 W.
 - Checkpoint huấn luyện tiếng Việt, bitstream, log tổng hợp, timing, UART và công suất kèm hash SHA256.
 - Cần phản biện độc lập kết quả và chống ghi đè bằng chứng. Workflow FAIL khi thiếu evidence.
 
