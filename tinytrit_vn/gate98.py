@@ -95,13 +95,15 @@ def validate(report_path: Path, evidence_dir: Path) -> dict:
              "Bitstream có trọng số huấn luyện tiếng Việt, không dùng trọng số mẫu")
     _require(checks, "hardware:zero_dsp", fpga.get("dsp48_count") == 0, "Yosys: DSP48 phải bằng 0")
     _require(checks, "hardware:generated_tokens", numeric("tokens_generated") >= 16, "Tối thiểu 16 token autoregressive")
-    _require(checks, "hardware:benchmark_clock", 49.9 <= numeric("benchmark_clock_mhz") <= 50.1,\n             "Thông lượng phải đo ở 50 MHz để so được với ~34 tok/s upstream")\n    _require(checks, "hardware:throughput", numeric("throughput_tok_s") >= THRESHOLD * REFERENCE_TOK_S,
-             f"Thông lượng >= {THRESHOLD * REFERENCE_TOK_S:.2f} tok/s (98% của 63)")
+    _require(checks, "hardware:benchmark_clock", 49.9 <= numeric("benchmark_clock_mhz") <= 50.1,
+             "Thông lượng phải đo ở 50 MHz để so được với ~34 tok/s upstream")
+    _require(checks, "hardware:throughput", numeric("throughput_tok_s") >= THRESHOLD * REFERENCE_TOK_S,
+             f"Thông lượng >= {THRESHOLD * REFERENCE_TOK_S:.2f} tok/s (98% của 34)")
     _require(checks, "hardware:fmax", numeric("fmax_mhz") >= THRESHOLD * REFERENCE_FMAX_MHZ,
              f"Fmax >= {THRESHOLD * REFERENCE_FMAX_MHZ:.2f} MHz (98% của 92)")
-    # Source says ~1W; 1.25 W is a declared tolerance, not a 98% energy-accuracy claim.
-    _require(checks, "hardware:power", 0 < numeric("power_w") <= 1.25,
-             "Công suất đo >0 và <=1.25 W; sai số/thiết bị phải giải trình")
+    # Latest upstream withdrew the ~1W estimate; require a new measurement only.
+    _require(checks, "hardware:power", 0 < numeric("power_w"),
+             "Công suất đo thực tế >0 W; nguồn gốc không có mốc 1 W được xác minh")
     passed = bool(checks) and all(c["pass"] for c in checks)
     return {
         "status": "PASS" if passed else "FAIL",
